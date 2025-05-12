@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <h1>Digite o nome do produto:</h1>
+    <input type="text" id="input_nome_produto">
+    <br><br>
+
+    <h1>Digite o código do produto:</h1>
+    <input type="text" id="input_codigo_produto">
+    <br><br>
+
+    <h1>Digite a quantidade do produto:</h1>
+    <input type="number" id="input_qtd_produto">
+    <br><br><br>
+
+    <button id="btn_cad" onclick="Cadastrar()">Cadastrar Produto</button>
+    <button id="btn_rep" onclick="Repor()">Repor Estoque</button>
+    <button id="btn_vend" onclick="Vender()">Vender Produto</button>
+    <button id="btn_exib" onclick="Exibir()">Exibir Relatório</button>
+
+    <br><br>
+
+    <div id="div_msm"></div>
+
+
+</body>
+
+</html>
+
+<script>
+    // listas de armazenamento
+    lista_nome_produto = [];
+    lista_quantidade_estoque = []; //minimo de 10 unidades de cada produto
+    lista_codigo_unico = [];
+    lista_venda = [];
+
+    // variaveis de coleta de dados do usuario
+    var nome_produto = '';
+    var codigo_produto = '';
+    var qtd_produto = '';
+
+
+
+    function Cadastrar() {
+        // variaveis de coleta de dados do usuario
+        nome_produto = input_nome_produto.value;
+        codigo_produto = input_codigo_produto.value;
+        qtd_produto = Number(input_qtd_produto.value);
+
+        // Validações de cadastro
+        var validacao_geral = false;
+
+        // Pré-validação cde codigo único
+        var validacao_codigo_unico = false;
+
+        for (var i = 0; i < lista_codigo_unico.length; i++) {
+            if (lista_codigo_unico[i] == codigo_produto) {
+                validacao_codigo_unico = true;
+                break
+            }
+        }
+
+        // Validações basicas para permitir inserções nas respectivas lista com mensagens de erros específicas
+        if (nome_produto == '' || codigo_produto == '' || qtd_produto == '') {
+            div_msm.innerHTML = 'Preencha todos os campos para registrar um novo produto';
+        } else if (validacao_codigo_unico) {
+            div_msm.innerHTML = `Código de produto ${codigo_produto} já existe `;
+        } else if (qtd_produto <= 10) {
+            div_msm.innerHTML = 'Quantidade mínima de produtos não atendida, insira mais'
+        } else {
+            validacao_geral = true;
+        }
+
+        // validação geral para executar a função ou não
+        if (validacao_geral) {
+            lista_nome_produto[lista_nome_produto.length] = nome_produto;
+            lista_codigo_unico[lista_codigo_unico.length] = codigo_produto;
+            lista_quantidade_estoque[lista_quantidade_estoque.length] = qtd_produto;
+            lista_venda[lista_venda.length] = 0;
+
+            div_msm.innerHTML = `Produto ${nome_produto} registrado com sucesso`;
+        }
+    }
+
+    function Repor() {
+        // variaveis de coleta de dados do usuario
+        nome_produto = input_nome_produto.value;
+        codigo_produto = input_codigo_produto.value;
+        qtd_produto = Number(input_qtd_produto.value);
+
+
+
+        // Variaveis de validção
+        var validacao_geral = false;
+        var validacao_includes = true;
+
+        // Variavel auxiliar para pesquisa
+        var indice_da_pesquisa = '';
+
+        for (var i = 0; i < lista_codigo_unico.length; i++) {
+
+            var pesquisa_nome = lista_nome_produto[i];
+            var pesquisa_codigo = lista_codigo_unico[i];
+
+            if (pesquisa_nome == nome_produto && pesquisa_codigo == codigo_produto) {
+                indice_da_pesquisa = i;
+                validacao_includes = false;
+            }
+        }
+
+        // Validações basicas para permitir inserções na respectiva lista com mensagens de erros específicas
+        if (nome_produto == '' || codigo_produto == '' || qtd_produto == '') {
+            div_msm.innerHTML = 'Preencha todos os campos para repor um produto';
+        } else if (validacao_includes) {
+            div_msm.innerHTML = `Produto não identificado`;
+        } else if (qtd_produto <= 0) {
+            div_msm.innerHTML = 'Quantidade inválida';
+        } else {
+            validacao_geral = true;
+        }
+
+        // validação geral para executar a função ou não
+        if (validacao_geral) {
+            lista_quantidade_estoque[indice_da_pesquisa] += qtd_produto;
+
+            div_msm.innerHTML = `${qtd_produto}x do ${nome_produto} foi reposto com sucesso`;
+        }
+
+
+    }
+
+    function Vender() {
+        // variaveis de coleta de dados do usuario
+        nome_produto = input_nome_produto.value;
+        codigo_produto = input_codigo_produto.value;
+        qtd_produto = Number(input_qtd_produto.value);
+
+        // Resete variavel geral
+        var validacao_geral = false;
+
+        // Reseta variavel com quantidade de produtos
+        var armazena_qtd_produtos = 0;
+
+        // variavel para armanezar o indice da pesquisa encontrada
+        var indice_da_pesquisa = 0;
+
+        //VAriavel para verificar se tem 
+        var validacao_includes = true;
+
+        // pré validação para adquirir  indice da pesquisa, alteração na variavel de manipulação de quantidade e validação se inclui
+        for (var i = 0; i < lista_codigo_unico.length; i++) {
+
+            var pesquisa_nome = lista_nome_produto[i];
+            var pesquisa_codigo = lista_codigo_unico[i];
+
+            if (pesquisa_nome == nome_produto && pesquisa_codigo == codigo_produto) {
+                indice_da_pesquisa = i;
+                armazena_qtd_produtos = lista_quantidade_estoque[i];
+                validacao_includes = false;
+            }
+        }
+
+        // Validações basicas para permitir inserções na respectiva lista com mensagens de erros específicas
+        if (nome_produto == '' || codigo_produto == '' || qtd_produto == '') {
+            div_msm.innerHTML = 'Preencha todos os campos para repor um produto';
+        } else if (validacao_includes) {
+            div_msm.innerHTML = `Produto não identificado`;
+        } else if (armazena_qtd_produtos - qtd_produto < 0) {
+            div_msm.innerHTML = 'Quantidade inválida: Quantidade insuficiente no estoque';
+        } else {
+            validacao_geral = true;
+        }
+
+        // validação geral para executar a função ou não
+        if (validacao_geral) {
+            lista_venda[indice_da_pesquisa] += 1;
+            lista_quantidade_estoque[indice_da_pesquisa] = armazena_qtd_produtos - qtd_produto;
+
+            div_msm.innerHTML = `${qtd_produto}x do ${nome_produto} foi vendido com sucesso`;
+        }
+
+    }
+
+    function Exibir() {
+
+        // Variavel para armazenamento de mensagem
+        var msm = '';
+
+        // variaveis para maiores alguma coisa
+        //estoque
+        var maior_estoque = 0;
+        var indice_maior_estoque = 0;
+        //vendas
+        var produto_mais_vendido = 0;
+        var indice_mais_venda = 0;
+
+        // variaveis para menores alguma coisa
+        //produto
+        var menor_estoque = lista_quantidade_estoque[0];
+        var indice_menor = 0;
+        //vendas
+        var produto_menos_vendido = lista_venda[0];
+        var indice_menos_venda = 0;
+
+        for (var i = 0; i < lista_codigo_unico.length; i++) {
+            // variavel para status do estoque
+            var status_estoque = '';
+
+            // Validação para maior ou menor estoque
+            if (maior_estoque < lista_quantidade_estoque[i]) {
+                maior_estoque = lista_quantidade_estoque[i];
+                indice_maior_estoque = i;
+            } else if (menor_estoque > lista_quantidade_estoque[i]) {
+                menor_estoque = lista_quantidade_estoque[i];
+                indice_menor = i;
+            }
+
+            // Validação para maior ou menor vendas
+            if(produto_mais_vendido < lista_venda[i]){
+                produto_mais_vendido = lista_venda[i];
+                indice_mais_venda = i;
+            } else {
+                produto_menos_vendido = lista_venda[i];
+                indice_menos_venda = i;
+            }
+
+            // Validação para status do estoque
+            if (lista_quantidade_estoque[i] <= 10) {
+                status_estoque = 'Precisa repor';
+            } else {
+                status_estoque = 'OK';
+            }
+
+            // Lista de mensagens das listas
+            msm += `Código: ${lista_codigo_unico[i]} | Produto: ${lista_nome_produto[i]} | Quantidade em Estoque: ${lista_quantidade_estoque[i]} (${status_estoque})<br>`;
+        }
+
+        var maior_
+
+        msm += `Produto com maior quantidade de estoque: ${lista_nome_produto[indice_maior_estoque]} | Produto com menor quantidade em estoque: ${lista_nome_produto[indice_menor]} | Produto mais vendido: ${nome_produto[indice_menos_venda]} | Produto menos vendido: ${lista_nome_produto[indice_mais_venda]}`;
+
+
+        div_msm.innerHTML = msm;
+
+
+    }
+
+    // Não utilizar indexOf, includes e JSON
+    // Desafio:
+    // Exibir no relatório as seguintes informações:
+
+    // Produto com maior quantidade em estoque
+    // Produto com menor quantidade em estoque
+    // Produto mais vendido
+    // Produto menos vendido
+    // Adicionar um novo botão remover produto que remove um produto de todas as listas. Utilize o método .splice() passando o índice que deseja remover e a quantidade de itens que deseja remover.
+
+    // Ex: nomes.splice(0, 1);
+
+    // Remove um item a partir da posição 0;
+
+</script>
