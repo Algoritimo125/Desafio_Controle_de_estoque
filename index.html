@@ -25,6 +25,7 @@
     <button id="btn_rep" onclick="Repor()">Repor Estoque</button>
     <button id="btn_vend" onclick="Vender()">Vender Produto</button>
     <button id="btn_exib" onclick="Exibir()">Exibir Relatório</button>
+    <button id="btn_rem" onclick="Remover()">Remover Produto</button>
 
     <br><br>
 
@@ -170,7 +171,7 @@
 
         // Validações basicas para permitir inserções na respectiva lista com mensagens de erros específicas
         if (nome_produto == '' || codigo_produto == '' || qtd_produto == '') {
-            div_msm.innerHTML = 'Preencha todos os campos para repor um produto';
+            div_msm.innerHTML = 'Preencha todos os campos para vender um produto';
         } else if (validacao_includes) {
             div_msm.innerHTML = `Produto não identificado`;
         } else if (armazena_qtd_produtos - qtd_produto < 0) {
@@ -224,7 +225,7 @@
             }
 
             // Validação para maior ou menor vendas
-            if(produto_mais_vendido < lista_venda[i]){
+            if (produto_mais_vendido < lista_venda[i]) {
                 produto_mais_vendido = lista_venda[i];
                 indice_mais_venda = i;
             } else {
@@ -245,12 +246,55 @@
 
         var maior_
 
-        msm += `Produto com maior quantidade de estoque: ${lista_nome_produto[indice_maior_estoque]} | Produto com menor quantidade em estoque: ${lista_nome_produto[indice_menor]} | Produto mais vendido: ${nome_produto[indice_menos_venda]} | Produto menos vendido: ${lista_nome_produto[indice_mais_venda]}`;
+        msm += `Produto com maior quantidade de estoque: ${lista_nome_produto[indice_maior_estoque]} | Produto com menor quantidade em estoque: ${lista_nome_produto[indice_menor]} | Produto mais vendido: ${lista_nome_produto[indice_mais_venda]} | Produto menos vendido: ${lista_nome_produto[indice_menos_venda]}`;
 
 
         div_msm.innerHTML = msm;
 
 
+    }
+
+    function Remover() {
+        // variaveis de coleta de dados do usuario
+        nome_produto = input_nome_produto.value;
+        codigo_produto = input_codigo_produto.value;
+        qtd_produto = Number(input_qtd_produto.value);
+
+         // Variavel auxiliar para pesquisa
+        var indice_da_pesquisa = '';
+        var validacao_includes = true;
+        // pré-validação, pesquisando se existe o produto e qual indice
+        for (var i = 0; i < lista_codigo_unico.length; i++) {
+
+            var pesquisa_nome = lista_nome_produto[i];
+            var pesquisa_codigo = lista_codigo_unico[i];
+
+            if (pesquisa_nome == nome_produto && pesquisa_codigo == codigo_produto) {
+                indice_da_pesquisa = i;
+                validacao_includes = false;
+            }
+        }
+
+        // Validação de entradas com mensagens de erro
+        if (nome_produto == '' || codigo_produto == '') {
+            div_msm.innerHTML = 'Preencha todos os campos: Nome e Código para excluir um produto';
+        } else if (validacao_includes) {
+            div_msm.innerHTML = `Produto não identificado`;
+        } else if (qtd_produto <= 0) {
+            div_msm.innerHTML = 'Quantidade inválida';
+        } else {
+            validacao_geral = true;
+        }
+
+        // validação geral para executar a função ou não
+        if (validacao_geral) {
+            lista_nome_produto.splice(indice_da_pesquisa, 1);
+            lista_codigo_unico.splice(indice_da_pesquisa, 1);
+            lista_quantidade_estoque.splice(indice_da_pesquisa, 1);
+
+            div_msm.innerHTML = `Produto ${nome_produto} foi excluido da lista com sucesso`;
+        }
+        
     }
 
     // Não utilizar indexOf, includes e JSON

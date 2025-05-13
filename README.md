@@ -50,6 +50,7 @@ Produto com maior quantidade em estoque
 Produto com menor quantidade em estoque
 Produto mais vendido
 Produto menos vendido
+
 Adicionar um novo botão remover produto que remove um produto de todas as listas. Utilize o método .splice() passando o índice que deseja remover e a quantidade de itens que deseja remover.
 
 Ex: nomes.splice(0, 1);
