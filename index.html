@@ -74,7 +74,7 @@
             div_msm.innerHTML = 'Preencha todos os campos para registrar um novo produto';
         } else if (validacao_codigo_unico) {
             div_msm.innerHTML = `Código de produto ${codigo_produto} já existe `;
-        } else if (qtd_produto <= 10) {
+        } else if (qtd_produto < 10) {
             div_msm.innerHTML = 'Quantidade mínima de produtos não atendida, insira mais'
         } else {
             validacao_geral = true;

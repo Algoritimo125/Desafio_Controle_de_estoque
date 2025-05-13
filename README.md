@@ -1,58 +1,99 @@
-# Desafio_Controle_de_estoque
+# 📦 Desafio: Controle de Estoque
 
-Condições de conclusão
+## 📝 Descrição
 
-## Contexto
-Uma grande rede de lojas de eletrônicos decidiu modernizar o sistema de controle de estoque de sua loja virtual. O novo sistema deve ser capaz de realizar operações automáticas de entrada e saída de produtos no estoque, além de emitir alertas quando os produtos atingem quantidades mínimas. Para facilitar a gestão e o planejamento de compras, o sistema deverá processar essas informações de maneira eficiente e apresentar relatórios que auxiliem na tomada de decisão.
+Este projeto é um sistema simples de **controle de estoque** desenvolvido com **HTML** e **JavaScript puro**, ideal para o gerenciamento de produtos em uma loja virtual de eletrônicos. Ele permite **cadastro**, **venda**, **reposição**, **remoção** e **exibição de relatórios** dos produtos, com regras de negócio bem definidas para garantir integridade do estoque.
 
-Como analista de sistemas, você foi encarregado de desenvolver um sistema para esse controle, sabendo que: 
+---
 
-A loja trabalha com uma lista de produtos  contendo um nome, um código único e sua quantidade em estoque.
-O estoque deve ser atualizado conforme as vendas e reposições desses produtos.
-A loja trabalha como o mínimo de 10 unidades de cada produto registrado em seu estoque, onde caso fique abaixo do limite, o sistema deve emitir um alerta indicando que é hora de repor o estoque.
-O sistema não deve permitir as vendas que sejam maiores que a quantidade em estoque, assim como a loja não pode vender sem estoque suficiente.
-De acordo com o contexto acima, crie um programa o qual: 
+## 🖥️ Funcionalidades
 
-Tenha um campo para registrar o nome, o código e a quantidade de produto (apenas números). 
+* **Cadastrar Produto**
 
-Tenha quatro botões: "Cadastrar Produto", "Repor Estoque", "Vender Produto" e "Exibir Relatório". 
+  * Registra nome, código único e quantidade do produto.
+  * Exige todos os campos preenchidos.
+  * A quantidade mínima para cadastro é de 10 unidades.
+  * Impede códigos duplicados.
 
-- Cadastro de Produto: O sistema deve cadastrar o produto, registrando seu nome, código e quantidade em estoque. Caso os campos estejam todos preenchidos, a quantidade seja acima do mínimo e o código do produto ainda não exista no estoque, exiba "Produto NOME_DO_PRODUTO registrado com sucesso", mas caso contrário, exiba "Preencha todos os campos para registrar um novo produto" ou "Código de produto já existente", de acordo com a validação. 
+* **Repor Estoque**
 
-- Reposição de Estoque: O sistema deve processar as reposições, aumentando a quantidade em estoque do produto especificado. Cada reposição envolve o código e o nome do produto, além da quantidade reposta. Caso o código e nome sejam identificados corretamente e a quantidade seja um acima de 0, exiba "9999x do NOME_DO_PRODUTO foi reposto com sucesso", mas caso contrário, exiba "Produto não identificado" ou "Quantidade inválida", de acordo com a validação.
+  * Atualiza o estoque de um produto existente.
+  * Requer nome, código e quantidade a repor (> 0).
+  * Exibe mensagem de sucesso ou erro.
 
-- Venda de Produtos: O sistema deve ser capaz de processar uma quantidade indefinida de vendas, reduzindo a quantidade de produtos no estoque. Cada venda envolve o código e o nome do produto, além da quantidade vendida. Caso o código e nome sejam identificados corretamente e a quantidade em estoque seja suficiente para a venda, exiba "9999x do NOME_DO_PRODUTO foi vendido com sucesso", mas caso contrário, exiba "Produto não identificado" ou "Quantidade inválida", de acordo com a validação. 
-Ao final de cada venda, o sistema deve verificar se algum produto ficou abaixo da quantidade mínima. Caso isso ocorra, o sistema deve emitir uma mensagem de alerta para reposição urgente daquele produto.
+* **Vender Produto**
 
-          Depois de cada operação de VENDA ou REPOSIÇÃO, o sistema deve exibir um relatório que mostra:
+  * Reduz a quantidade em estoque.
+  * Impede vendas que ultrapassem a quantidade disponível.
+  * Exibe mensagem de sucesso ou erro.
+  * Alerta se o estoque ficar abaixo de 10 unidades.
 
-                "Código: AAA | Produto: BBBBB | Quantidade em Estoque: CCC (DDDDD)" 
+* **Exibir Relatório**
 
-          Se algum produto está abaixo do mínimo, exibir mensagem em DDDDD indicando que ele precisa ser reposto ou se o estoque está OK.
+  * Mostra todos os produtos com suas quantidades e status do estoque.
+  * Identifica e exibe:
 
-- Exibir Relatório: O sistema deve exibir um relatório do estoque, como o abaixo: 
+    * Produto com **maior** e **menor** quantidade em estoque.
+    * Produto **mais vendido** e **menos vendido**.
+  * Status:
 
-    "Código: ABZ | Produto: Arroz | Quantidade em Estoque: 12 (OK)" 
+    * **OK**: Estoque igual ou acima de 10.
+    * **Precisa Repor**: Estoque abaixo de 10.
 
-    "Código: ABPSC | Produto: Feijão | Quantidade em Estoque: 4 (Precisa Repor)" 
+* **Remover Produto**
 
-    "Código: 123A | Produto: Caneta | Quantidade em Estoque: 75 (OK)" 
+  * Remove um produto de todas as listas com base em nome e código.
+  * Utiliza o método `.splice()` para exclusão.
 
-    "Código: EHFD | Produto: Caderno | Quantidade em Estoque: 2 (Precisa Repor)" 
+---
 
-Restrições:
-Não utilizar indexOf, includes e JSON
+## 📋 Regras de Negócio
 
-## Desafio:
-Exibir no relatório as seguintes informações:
+* Estoque mínimo: **10 unidades** por produto.
+* Não é permitido cadastrar produtos com código repetido.
+* Não é permitido vender sem estoque suficiente.
+* Após cada operação de **venda** ou **reposição**, o relatório é atualizado.
 
-Produto com maior quantidade em estoque
-Produto com menor quantidade em estoque
-Produto mais vendido
-Produto menos vendido
+---
 
-Adicionar um novo botão remover produto que remove um produto de todas as listas. Utilize o método .splice() passando o índice que deseja remover e a quantidade de itens que deseja remover.
+## ⚠️ Restrições Técnicas
 
-Ex: nomes.splice(0, 1);
+* **Não utilizar** `indexOf`, `includes` ou `JSON`.
+* Pesquisas são feitas com loops `for` e comparações diretas.
 
-Remove um item a partir da posição 0;
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+* **HTML5**: Interface do usuário.
+* **JavaScript**: Manipulação de dados e lógica de negócio.
+
+---
+
+## 💡 Exemplo de Relatório
+
+```
+Código: ABZ | Produto: Arroz | Quantidade em Estoque: 12 (OK)
+Código: ABPSC | Produto: Feijão | Quantidade em Estoque: 4 (Precisa Repor)
+Código: 123A | Produto: Caneta | Quantidade em Estoque: 75 (OK)
+Código: EHFD | Produto: Caderno | Quantidade em Estoque: 2 (Precisa Repor)
+
+Produto com maior quantidade de estoque: Caneta
+Produto com menor quantidade em estoque: Caderno
+Produto mais vendido: Arroz
+Produto menos vendido: Feijão
+```
+
+---
+
+## 🚀 Como Usar
+
+1. Abra o arquivo `.html` em seu navegador.
+2. Preencha os campos para cadastrar, repor, vender ou remover produtos.
+3. Clique em “Exibir Relatório” para ver o status do estoque.
+
+---
+
+## ✅ Conclusão
+
+Este projeto cumpre os requisitos de um sistema de controle de estoque básico com lógica de negócios e manipulação de arrays sem recursos avançados de JavaScript. Ideal para estudos introdutórios de estrutura de dados e lógica de programação.
